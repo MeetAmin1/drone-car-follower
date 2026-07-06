@@ -1,0 +1,15 @@
+build/
+install/
+log/
+logs/
+plots/
+artifacts/
+__pycache__/
+*.pyc
+.pytest_cache/
+.vscode/
+.idea/
+*.egg-info/
+
+# Local submission email draft
+EMAIL_SUBMISSION.txt

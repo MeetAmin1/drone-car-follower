@@ -1,0 +1,62 @@
+# This is the single source of truth for every runtime threshold and operating value.
+# Nodes intentionally do not contain fallback values for these parameters.
+
+full_stack_launch:
+  ros__parameters:
+    gazebo_startup_timeout_s: 60.0
+    gazebo_startup_poll_s: 0.5
+
+follower_node:
+  ros__parameters:
+    # Required failure thresholds
+    car_timeout_s: 0.2
+    max_position_jump_m: 5.0
+
+    # Follow behaviour
+    follow_offset_m: 8.0
+    target_altitude_m: 20.0
+    min_heading_speed_mps: 0.1
+    waypoint_publish_rate_hz: 20.0
+
+px4_offboard_node:
+  ros__parameters:
+    # Required arming recovery: one initial command plus three retries
+    arm_retry_count: 3
+    arm_retry_interval_s: 2.0
+    offboard_retry_count: 3
+    offboard_retry_interval_s: 2.0
+
+    # Flight behaviour and watchdogs
+    control_rate_hz: 20.0
+    offboard_warmup_s: 1.0
+    takeoff_altitude_m: 20.0
+    takeoff_tolerance_m: 0.5
+    takeoff_stable_s: 1.0
+    takeoff_timeout_s: 30.0
+    waypoint_timeout_s: 0.5
+    px4_status_initial_timeout_s: 60.0
+    px4_preflight_timeout_s: 90.0
+    px4_status_loss_timeout_s: 3.0
+
+car_position_node:
+  ros__parameters:
+    source_topic: /car/odometry
+    publish_topic: /car/position
+
+gazebo_monitor_node:
+  ros__parameters:
+    # Required Gazebo health thresholds
+    rtf_min: 0.8
+    rtf_warning_interval_s: 5.0
+    rtf_window_s: 2.0
+    monitor_rate_hz: 2.0
+
+telemetry_logger_node:
+  ros__parameters:
+    telemetry_rate_hz: 10.0
+    arrival_rate_window_s: 1.0
+
+gcs_heartbeat_node:
+  ros__parameters:
+    px4_mavlink_endpoint: udpout:127.0.0.1:18570
+    heartbeat_rate_hz: 1.0

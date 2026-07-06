@@ -1,0 +1,44 @@
+name: integration-test
+
+'on':
+  push:
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  full-stack:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 90
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Report runner capacity
+        run: |
+          docker version
+          df -h
+
+      - name: Build Docker image
+        run: docker build --tag drone-system-ci .
+
+      - name: Run 60-second integration test
+        run: |
+          mkdir -p artifacts
+          docker run --rm --init \
+            --network host \
+            --shm-size 1g \
+            -e DRONE_SYSTEM_LOG=/artifacts/ci_run.jsonl \
+            -v "$PWD/artifacts:/artifacts" \
+            drone-system-ci \
+            bash -lc '/workspace/src/drone-car-follower/tools/run_integration.sh 60'
+
+      - name: Upload logs and plots
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: integration-logs
+          path: artifacts/
+          if-no-files-found: warn
+          retention-days: 7

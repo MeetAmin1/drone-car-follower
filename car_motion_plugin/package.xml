@@ -1,0 +1,13 @@
+<?xml version="1.0"?>
+<package format="3">
+  <name>car_motion_plugin</name>
+  <version>1.0.0</version>
+  <description>Gazebo Harmonic system plugin that drives a car on a repeating figure-eight path.</description>
+  <maintainer email="meetamin2003@gmail.com">Meet Amin</maintainer>
+  <license>MIT</license>
+  <buildtool_depend>ament_cmake</buildtool_depend>
+  <depend>gz-sim8</depend>
+  <export>
+    <build_type>ament_cmake</build_type>
+  </export>
+</package>
