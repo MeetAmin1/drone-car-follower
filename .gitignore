@@ -2,7 +2,7 @@ build/
 install/
 log/
 logs/
-plots/
+/plots/
 artifacts/
 __pycache__/
 *.pyc
@@ -13,3 +13,9 @@ __pycache__/
 
 # Local submission email draft
 EMAIL_SUBMISSION.txt
+
+# Keep validated runtime evidence in the public repository.
+!runtime_logs/
+!runtime_logs/run.jsonl
+!runtime_logs/plots/
+!runtime_logs/plots/*.png

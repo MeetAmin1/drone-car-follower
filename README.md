@@ -1,4 +1,6 @@
 # PX4 ROS 2 Drone-Car Follower
+[![integration-test](https://github.com/MeetAmin1/drone-car-follower/actions/workflows/integration_test.yml/badge.svg)](https://github.com/MeetAmin1/drone-car-follower/actions/workflows/integration_test.yml)
+
 
 A complete ROS 2 system in which a PX4 SITL x500 takes off to 20 m and follows a Gazebo car on a repeating figure-eight path at a fixed 8 m horizontal trailing offset. The follower is intentionally isolated between `/car/position` and `/drone/waypoint`; it never queries Gazebo services, model-state parameters, or the car plugin's internal trajectory.
 
@@ -49,7 +51,7 @@ docker run --rm --init --network host --shm-size 1g \
   -v "$PWD/artifacts:/artifacts" \
   -e DRONE_SYSTEM_LOG=/artifacts/ci_run.jsonl \
   drone-car-follower \
-  bash -lc '/workspace/src/drone-car-follower/tools/run_integration.sh 60'
+  bash /workspace/src/drone-car-follower/tools/run_integration.sh 60
 ```
 
 This command prints the log summary and CI result, then saves the JSONL log and four plots under `artifacts/`.
@@ -143,9 +145,13 @@ Outputs:
 
 ## Validation status
 
-The corrected stack was executed in Docker on 6 July 2026. The image built successfully, all 19 repository tests passed, PX4 completed preflight checks, entered offboard mode, armed, took off, reached 20 m, and enabled follow mode. A persistent 75-second run produced 74.0 seconds of telemetry and passed the CI check: the final 30-second altitude stayed above 1 m, car updates remained active, and no final-window errors occurred.
+The corrected stack was validated in Docker on 6 July 2026. The image built successfully, all 19 repository tests passed, PX4 completed its preflight checks, entered offboard mode, armed, took off, reached the configured 20 m altitude, and enabled follow mode.
 
-The saved evidence is under `runtime_logs/`. One startup `CAR_POSITION_TIMEOUT` occurred when the stream gap reached 0.241 s; the node commanded hover as required and resumed follow mode when updates recovered. This is an exercised safety response, not a hidden failure.
+The repository includes the validated JSONL log at `runtime_logs/run.jsonl` and all four generated plots under `runtime_logs/plots/`. The final integration-window check passed: altitude remained above 1 m, the car-position stream stayed active, and no error occurred during the final 30 seconds.
+
+One startup `CAR_POSITION_TIMEOUT` occurred when the update gap briefly exceeded the configured 0.2 s threshold. The follower commanded hover and automatically resumed follow mode when updates recovered. This demonstrates the required safety response.
+
+The successful GitHub Actions integration test uploads the JSONL log and plots as an artifact.
 
 ## CI
 
@@ -174,7 +180,6 @@ The Docker build also runs this test suite and fails if any test fails.
 - `ANALYSIS.md` — required written analysis and explicit limitations
 - `REQUIREMENTS_TRACEABILITY.md` — requirement-by-requirement implementation map
 - `VALIDATION_REPORT.md` — static and full-stack validation evidence
-- `EMAIL_SUBMISSION.txt` — submission email draft
 
 ## Known limitations
 
