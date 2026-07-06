@@ -7,8 +7,11 @@ LOG_FILE="${DRONE_SYSTEM_LOG:-${REPO_ROOT}/logs/ci_run.jsonl}"
 mkdir -p "$(dirname "${LOG_FILE}")"
 : > "${LOG_FILE}"
 
+# Generated ROS and colcon setup scripts are not nounset-safe.
+set +u
 source /opt/ros/jazzy/setup.bash
 source "${ROS_WS:-/workspace}/install/setup.bash"
+set -u
 
 export DRONE_SYSTEM_LOG="${LOG_FILE}"
 set +e
