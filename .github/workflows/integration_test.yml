@@ -32,7 +32,7 @@ jobs:
             -e DRONE_SYSTEM_LOG=/artifacts/ci_run.jsonl \
             -v "$PWD/artifacts:/artifacts" \
             drone-system-ci \
-            bash -lc '/workspace/src/drone-car-follower/tools/run_integration.sh 60'
+            bash -lc 'bash /workspace/src/drone-car-follower/tools/run_integration.sh 60'
 
       - name: Upload logs and plots
         if: always()
